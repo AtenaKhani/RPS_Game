@@ -14,6 +14,17 @@ class PlayerModel(Base):
     score = Column(Integer, default=0)
 
 
+class GameModel(Base):
+    __tablename__ = 'game'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    player1_name = Column(String)
+    player2_name = Column(String)
+    player1_wins = Column(Integer)
+    player2_wins = Column(Integer)
+    sets = Column(Integer)
+
+
+
 class Player:
     def __init__(self, name: str):
         self.name = name

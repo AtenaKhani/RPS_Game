@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-
+Base = declarative_base()
 class Player:
     def __init__(self, name: str):
         self.name = name

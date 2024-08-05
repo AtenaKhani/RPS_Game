@@ -42,6 +42,12 @@ class Database:
             session.add(new_entry)
         session.commit()
         session.close()
+        
+    def get_all_record(self, model):
+        session = self.Session()
+        result = session.query(model).all()
+        session.close()
+        return result
 
 
 

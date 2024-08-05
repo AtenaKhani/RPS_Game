@@ -108,16 +108,15 @@ class Game:
 
 class Leaderboard:
     def __init__(self):
-        self.scores = {}
+        self.db = Database('sqlite:///mydatabase.db', Base)
 
     def update_scores(self, player: Player):
-        if player.name not in self.scores:
-            self.scores[player.name] = 0
-        self.scores[player.name] += 1
+        self.db.add_record(PlayerModel, name=player.name, score=1)
 
     def print_leaderboard(self):
+        score={}
         print("--- Leaderboard ---")
-        sorted_players = sorted(self.scores.items(), key=lambda item: item[1], reverse=True)
+        sorted_players = sorted(score.items(), key=lambda item: item[1], reverse=True)
         table = [['Player', 'Score']] + [[player, score] for player, score in sorted_players]
         print(tabulate(table, headers="firstrow", tablefmt="grid"))
 

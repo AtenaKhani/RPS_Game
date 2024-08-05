@@ -126,7 +126,7 @@ class Manager:
 
     def main(self):
         while True:
-            print("Please choose an option:\n 1-Start Game\n 2-Show Leaderboard\n 3-Exit")
+            print("Please choose an option:\n 1-Start Game\n 2-Show Leaderboard\n 3-Show Game log\n 4-Exit")
             choice = int(input("Enter your choice: "))
             if choice == 1:
                 while True:
@@ -158,7 +158,16 @@ class Manager:
                              player2_wins=wins2, sets=sets)
             elif choice == 2:
                 self.leaderboard.print_leaderboard()
-            elif choice == 3:
+            elif choice ==3:
+                db = Database('sqlite:///mydatabase.db', Base)
+                records = db.get_all_record(GameModel)
+                list1 = []
+                for record in records:
+                    list1.append([record.player1_name, record.player2_name, record.player1_wins, record.player2_wins, record.sets])
+                table = [['Player1_name', 'player2_name','player1_wins', 'player2_wins', 'sets']] + list1
+                print(tabulate(table, headers="firstrow", tablefmt="grid"))
+
+            elif choice == 4:
                 break
             else:
                 print("Invalid choice. Please try again ")

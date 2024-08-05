@@ -153,6 +153,9 @@ class Manager:
                 elif wins2 > wins1:
                     self.leaderboard.update_scores(player_two)
                     player_two.score += 1
+                db = Database('sqlite:///mydatabase.db', Base)
+                db.add_record(GameModel, player1_name=player1_name, player2_name=player2_name, player1_wins=wins1,
+                             player2_wins=wins2, sets=sets)
             elif choice == 2:
                 self.leaderboard.print_leaderboard()
             elif choice == 3:

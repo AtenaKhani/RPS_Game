@@ -24,6 +24,14 @@ class GameModel(Base):
     sets = Column(Integer)
 
 
+class Database:
+    def __init__(self, db_url, Base):
+        self.engine = create_engine(db_url, echo=False)
+        Base.metadata.create_all(self.engine)
+        self.Session = scoped_session(sessionmaker(bind=self.engine))
+
+
+
 
 class Player:
     def __init__(self, name: str):

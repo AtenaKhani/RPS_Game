@@ -5,6 +5,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 Base = declarative_base()
+
+
+class PlayerModel(Base):
+    __tablename__ = 'player'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, unique=True)
+    score = Column(Integer, default=0)
+
+
 class Player:
     def __init__(self, name: str):
         self.name = name

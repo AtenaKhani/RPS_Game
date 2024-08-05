@@ -30,6 +30,20 @@ class Database:
         Base.metadata.create_all(self.engine)
         self.Session = scoped_session(sessionmaker(bind=self.engine))
 
+    def add_record(self, model,**kwargs):
+        session = self.Session()
+        entry = session.query(model).filter_by(**{k: v for k, v in kwargs.items() if k != 'score'}).first()
+        if entry and model == PlayerModel:
+            # Update the score if the entry exists
+            score = kwargs.pop('score')
+            entry.score += score
+        else:
+            new_entry = model(**kwargs)
+            session.add(new_entry)
+        session.commit()
+        session.close()
+
+
 
 
 

@@ -30,7 +30,7 @@ class Database:
         Base.metadata.create_all(self.engine)
         self.Session = scoped_session(sessionmaker(bind=self.engine))
 
-    def add_record(self, model,**kwargs):
+    def add_record(self, model, **kwargs):
         session = self.Session()
         entry = session.query(model).filter_by(**{k: v for k, v in kwargs.items() if k != 'score'}).first()
         if entry and model == PlayerModel:
@@ -42,15 +42,12 @@ class Database:
             session.add(new_entry)
         session.commit()
         session.close()
-        
+
     def get_all_record(self, model):
         session = self.Session()
         result = session.query(model).all()
         session.close()
         return result
-
-
-
 
 
 class Player:
@@ -114,8 +111,11 @@ class Leaderboard:
         self.db.add_record(PlayerModel, name=player.name, score=1)
 
     def print_leaderboard(self):
-        score={}
+        score = {}
         print("--- Leaderboard ---")
+        records = self.db.get_all_record(PlayerModel)
+        for record in records:
+            score[record.name] = record.score
         sorted_players = sorted(score.items(), key=lambda item: item[1], reverse=True)
         table = [['Player', 'Score']] + [[player, score] for player, score in sorted_players]
         print(tabulate(table, headers="firstrow", tablefmt="grid"))

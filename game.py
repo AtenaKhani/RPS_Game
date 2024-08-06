@@ -1,19 +1,19 @@
 from tabulate import tabulate
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 
-Base = declarative_base()
+base = declarative_base()
 
 
-class PlayerModel(Base):
+class PlayerModel(base):
     __tablename__ = 'player'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, unique=True)
     score = Column(Integer, default=0)
 
 
-class GameModel(Base):
+class GameModel(base):
     __tablename__ = 'game'
     id = Column(Integer, primary_key=True, autoincrement=True)
     player1_name = Column(String)
@@ -104,7 +104,7 @@ class Game:
 
 class Leaderboard:
     def __init__(self):
-        self.db = Database('sqlite:///mydatabase.db', Base)
+        self.db = Database('sqlite:///mydatabase.db', base)
 
     def update_scores(self, player: Player):
         self.db.add_record(PlayerModel, name=player.name, score=1)
@@ -152,18 +152,19 @@ class Manager:
                 elif wins2 > wins1:
                     self.leaderboard.update_scores(player_two)
                     player_two.score += 1
-                db = Database('sqlite:///mydatabase.db', Base)
+                db = Database('sqlite:///mydatabase.db', base)
                 db.add_record(GameModel, player1_name=player1_name, player2_name=player2_name, player1_wins=wins1,
-                             player2_wins=wins2, sets=sets)
+                              player2_wins=wins2, sets=sets)
             elif choice == 2:
                 self.leaderboard.print_leaderboard()
-            elif choice ==3:
-                db = Database('sqlite:///mydatabase.db', Base)
+            elif choice == 3:
+                db = Database('sqlite:///mydatabase.db', base)
                 records = db.get_all_record(GameModel)
                 list1 = []
                 for record in records:
-                    list1.append([record.player1_name, record.player2_name, record.player1_wins, record.player2_wins, record.sets])
-                table = [['Player1_name', 'player2_name','player1_wins', 'player2_wins', 'sets']] + list1
+                    list1.append([record.player1_name, record.player2_name, record.player1_wins, record.player2_wins,
+                                  record.sets])
+                table = [['Player1_name', 'player2_name', 'player1_wins', 'player2_wins', 'sets']] + list1
                 print(tabulate(table, headers="firstrow", tablefmt="grid"))
 
             elif choice == 4:

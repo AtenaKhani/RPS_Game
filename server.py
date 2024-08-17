@@ -62,6 +62,16 @@ class Server:
         for client_socket in self.clients:
             client_socket.send(final_result.encode())
 
+    def get_choice(self, client_socket, choices, index):
+        while True:
+            client_socket.send("Choose 'r:rock', 'p:paper', or 's:scissors': ".encode())
+            choice = client_socket.recv(1024).decode().strip().lower()
+            if choice in ['r', 'p', 's']:
+                choices[index] = choice
+                break
+            else:
+                client_socket.send("Invalid choice. Please choose 'r', 'p', or 's'.".encode())
+
     def specify_winner(self, choices):
         wins_mode = {
             "r": "s",

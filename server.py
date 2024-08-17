@@ -8,7 +8,7 @@ class Server:
         self.port = port
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.clients = []
-        self.player_info = []
+        self.names = []
 
     def start(self):
         self.server_socket.bind((self.host, self.port))
@@ -28,7 +28,7 @@ class Server:
             if name in self.names:
                 client_socket.send("This name is already taken. Please choose a different name.".encode())
             else:
-                self.player_info[name] = 0
+                self.names.append(name)
                 break
         if len(self.names) == 2:
             for client_socket in self.clients:

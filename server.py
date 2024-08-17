@@ -85,3 +85,8 @@ class Server:
             return 1
         else:
             return 2
+
+
+if __name__ == "__main__":
+    server = Server('127.0.0.1', 8100)
+    server.start()

@@ -35,6 +35,33 @@ class Server:
                 client_socket.send("Game is starting!".encode())
             self.play_game()
 
+    def play_game(self):
+        player1_wins = 0
+        player2_wins = 0
+        rounds = 3
+        for _ in range(rounds):
+            choices = [None, None]
+            threads = []
+            for i, client_socket in enumerate(self.clients):
+                thread = threading.Thread(target=self.get_choice, args=(client_socket, choices, i))
+                threads.append(thread)
+                thread.start()
+
+            for thread in threads:
+                thread.join()
+            winner = self.specify_winner(choices)
+            result = "No one won!" if not winner else f"{self.names[0] if winner == 1 else self.names[1]} wins this round!"
+            if winner == 1:
+                player1_wins += 1
+            elif winner == 2:
+                player2_wins += 1
+            for client_socket in self.clients:
+                client_socket.send(result.encode())
+
+        final_result = "final_result:It's a tie!" if player1_wins == player2_wins else f"final_result:{self.names[0] if player1_wins > player2_wins else self.names[1]} wins the game!"
+        for client_socket in self.clients:
+            client_socket.send(final_result.encode())
+
     def specify_winner(self, choices):
         wins_mode = {
             "r": "s",

@@ -35,3 +35,16 @@ class Server:
                 client_socket.send("Game is starting!".encode())
             self.play_game()
 
+    def specify_winner(self, choices):
+        wins_mode = {
+            "r": "s",
+            "p": "r",
+            "s": "p"
+        }
+        choice1, choice2 = choices
+        if choice1 == choice2:
+            return 0
+        elif choice2 == wins_mode[choice1]:
+            return 1
+        else:
+            return 2
